@@ -1,0 +1,18 @@
+---
+# TODO: clone my dotfiles into the home directory
+- name: Install Self Selected Dev Packages
+  package:
+    name:
+      - neovim # better vim
+      - ripgrep # 🦀
+      - tldr
+      - thefuck # fix terminal mistakes
+      - tmux # terminal multiplexing
+      - fzf # fuzzy finder
+    state: latest
+  become: yes
+
+- import_tasks: btop.yml
+- import_tasks: shfmt.yml
+
+# lua-language-server

@@ -1,0 +1,14 @@
+---
+- name: Install btop on MacOS
+  when: ansible_distribution == 'MacOSX'
+  package:
+    name:
+      - btop
+    state: latest
+
+- name: Install btop on Ubuntu
+  when: ansible_distribution == 'Ubuntu'
+  community.general.snap:
+    name:
+      - btop
+  become: yes

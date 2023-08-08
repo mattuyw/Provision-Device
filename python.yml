@@ -1,0 +1,41 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    venv_dir: $HOME/.pipx
+    pipx: "{{ venv_dir }}/bin/pipx"
+  tasks:
+    - name: Check if virtual environment already exists
+      stat:
+        path: "{{ venv_dir }}"
+      register: venv_stat
+    - name: Create a virtual environment
+      command:
+        cmd: python3 -m venv "{{ venv_dir }}"
+      when: not venv_stat.stat.exists
+    - name: Install pipx
+      ansible.builtin.pip:
+        name: pipx
+        state: present
+        virtualenv: "{{ venv_dir }}"
+        virtualenv_command: python3 -m venv
+    - name: Install AWS CLI
+      community.general.pipx:
+        name: awscliv2
+        state: present
+        executable: "{{ pipx }}"
+    # TODO: must run awsv2 --install?
+    - name: Install pre-commit
+      community.general.pipx:
+        name: pre-commit
+        state: present
+        executable: "{{ pipx }}"
+    - name: Install gcaws (GameChanger AWS CLI helper)
+      community.general.pipx:
+        name: gcaws==0.26
+        state: present
+        index_url: https://pypi.gamechanger.io/simple/
+        executable: "{{ pipx }}"
+      # name: Install session manager plugin
+      # community.general.pipx:
+      #   name: 

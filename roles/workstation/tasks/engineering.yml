@@ -1,0 +1,25 @@
+---
+- name: Install/Upgrade Engineering Casks
+  homebrew_cask:
+    name:
+      - pop
+      - session-manager-plugin
+    state: latest
+
+- name: Source tfswitch 📦
+  homebrew_tap:
+    name: warrensbox/tap
+    url: git@github.com:warrensbox/tap.git
+    state: present
+
+- name: Install/Upgrade tfswitch 📦
+  homebrew:
+    name: tfswitch
+    state: latest
+  # TODO: switch to tfenv
+
+- name: Install/Upgrade Cloud Software ☁️
+  homebrew:
+    name:
+      - awscli
+    state: latest

@@ -1,0 +1,28 @@
+- name: Set fonts directory fact.
+  set_fact:
+    nf_fonts_dir: "{{ (ansible_facts['os_family'] == 'Darwin')|ternary(nf_macos_fonts_dir, nf_linux_fonts_dir) }}"
+
+- name: Ensure fonts directory exists.
+  file:
+    path: "{{ nf_fonts_dir }}"
+    recurse: true
+    state: directory
+    # owner: "{{ ansible_user_id }}"
+
+- name: Download individual fonts to fonts directory.
+  include_tasks: "download_font.yml"
+  loop: "{{ nf_single_fonts }}"
+  loop_control:
+    loop_var: font
+
+# - name: GameChanger Engineering Software for MacOS
+#   when: ansible_distribution == 'MacOSX'
+#   block:
+#     # NOTE: `homebrew_cask` is a required hack.
+#     #       packages will default to homebrew which will report failure for
+#     #       existing software
+#     - name: Install/Upgrade Engineering Casks
+#       homebrew_cask:
+#         name:
+#           - font-hack-nerd-font
+#         state: latest

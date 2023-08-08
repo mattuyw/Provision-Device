@@ -1,0 +1,12 @@
+---
+# NOTE: `homebrew_cask` is a required hack.
+#       packages will default to homebrew which will report failure for
+#       existing software
+- homebrew:
+    update_homebrew: true
+    upgrade_all: true
+
+/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+$(BREW_CMD) tap homebrew/cask
+
+brew cleanup

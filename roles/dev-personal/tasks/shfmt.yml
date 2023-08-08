@@ -1,0 +1,13 @@
+---
+- name: shfmt
+  block:
+    - name: Check if shfmt is installed
+      command: command -v shfmt
+      register: shfmt_version_result
+      failed_when: false
+      changed_when: false
+
+    - name: Download and install shfmt if not installed
+      shell: |
+        curl -sS https://webi.sh/shfmt | sh
+      when: shfmt_version_result.rc != 0

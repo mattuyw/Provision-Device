@@ -1,0 +1,34 @@
+---
+# NOTE: `homebrew_cask` is a required hack.
+#       packages will default to homebrew which will report failure for
+#       existing software
+- name: Install/Upgrade Casks for Self Selected Software
+  homebrew_cask:
+    name:
+      - alacritty
+      - amethyst
+      - bartender
+      - obs # media recorder
+      - yubico-yubikey-manager
+      - firefox
+      - iina # media player
+      - topnotch
+      - alfred
+    state: latest
+
+- name: Install Self Selected Software
+  homebrew:
+    name:
+      - gnupg
+      - ykman # yubikey
+      - reattach-to-user-namespace # tmux requirement on MacOS
+      - lua-language-server # for neovim configuration
+    state: latest
+
+- name: Install/Upgrade Entertainment Software
+  homebrew_cask:
+    name:
+      - spotify
+      - signal
+    state: latest
+

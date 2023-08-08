@@ -1,0 +1,20 @@
+---
+
+- name: GameChanger Corporate Software for MacOS
+  when: ansible_distribution == 'MacOSX'
+  block:
+    - import_tasks: homebrew.yml
+
+    - name: Install/Upgrade Casks
+      homebrew_cask:
+        name:
+          - 1password/tap/1password-cli
+          - docker
+          - slack
+          - notion
+          # - burp-suite # TODO: move to personal
+        state: latest
+
+    - import_tasks: wireguard.yml
+    - import_tasks: engineering.yml
+    - import_tasks: personal.yml

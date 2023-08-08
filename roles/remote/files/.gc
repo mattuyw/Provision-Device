@@ -1,0 +1,45 @@
+if [ -n "$ZSH_VERSION" ]; then
+    shell=zsh
+elif [ -n "$BASH_VERSION" ]; then
+    shell=bash
+else 
+   echo "Unsupported shell. Exiting script."
+   return
+fi
+
+alias ll="ls -lh"
+alias la="ls -la"
+alias ls='lsd'
+alias cat='bat --paging=never'
+
+# function aws() { docker run --rm -i --env-file <(env | grep AWS_) -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli "$@" }
+ssm() {
+  aws ssm start-session --target $(aws ec2 describe-instances --filters "Name=tag:Name,Values=$1" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].[InstanceId]" --output text) --reason $(whoami) --document-name "Boxes" --parameters "username=$(whoami)"
+}
+
+export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+
+export PIP_REQUIRE_VIRTUALENV=true
+
+# export PATH="$PATH:$HOME/bin" TODO: why? terraform. tfswitch?
+# export PATH="$PATH:$HOME/.pipx/bin"
+# export PATH="/usr/local/bin:$PATH"
+# export PATH="/opt/homebrew/bin:$PATH"
+# export PATH="/opt/homebrew/sbin:$PATH"
+# export PATH="$HOME/.local/pipx/venvs:$PATH"
+# # export PATH="$HOME/.cargo/bin:$PATH"
+# export PATH="$HOME/.local/bin:$PATH"
+
+export FZF_DEFAULT_COMMAND="fd . $HOME"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd -t d . $HOME"
+
+# https://ole.michelsen.dk/blog/syntax-highlight-files-macos-terminal-less/
+LESSPIPE=`which src-hilite-lesspipe.sh`
+export LESSOPEN="| ${LESSPIPE} %s"
+export LESS=' -R -X -F '
+
+command -v starship > /dev/null 2>&1 && source <(starship init $shell --print-full-init)
+[ -f ~/.fzf.$shell ] && source ~/.fzf.$shell 2> /dev/null
+[ -f ~/.local/env ] && source ~/.local/env 2> /dev/null
+# [ -f ~/.cargo/env ] && source ~/.cargo/env 2> /dev/null

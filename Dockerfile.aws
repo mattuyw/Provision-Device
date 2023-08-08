@@ -1,0 +1,19 @@
+FROM golang:alpine as builder
+ARG VERSION=1.2.463.0	
+# 3.1.1511.0
+RUN set -ex && apk add --no-cache make git gcc libc-dev curl bash && \
+    curl -sLO https://github.com/aws/amazon-ssm-agent/archive/refs/tags/${VERSION}.tar.gz && \
+    mkdir -p /go/src/github.com && \
+    tar xzf ${VERSION}.tar.gz && \
+    mv amazon-ssm-agent-${VERSION} /go/src/github.com/amazon-ssm-agent && \
+    cd /go/src/github.com/amazon-ssm-agent && \
+    # echo ${VERSION} > VERSION && \
+    # sed -i s/3.1.0.0/${VERSION}/g /go/src/github.com/amazon-ssm-agent/agent/version/version.go && \
+    gofmt -w agent && make checkstyle && \
+    make build-linux
+
+
+# COPY --from=builder /go/src/github.com/amazon-ssm-agent/bin/linux_amd64/ /usr/bin
+# COPY --from=builder /go/src/github.com/amazon-ssm-agent/bin/seelog_unix.xml /etc/amazon/ssm/seelog.xml
+# COPY conf/amazon-ssm-agent.json /etc/amazon/ssm/amazon-ssm-agent.json
+

@@ -1,0 +1,11 @@
+---
+- name: Install Mac App Store CLI
+  homebrew:
+    name:
+      - mas
+    state: latest
+
+- name: Install Wireguard from Mac App Store
+  community.general.mas:
+    id: 1451685025 # `mas search Wireguard`
+    state: latest

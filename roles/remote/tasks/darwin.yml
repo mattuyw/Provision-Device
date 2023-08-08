@@ -1,0 +1,8 @@
+- name: Install Foundations-Suggested CLI Packages
+  when: ansible_distribution == 'MacOSX'
+  homebrew:
+    name:
+      - less
+      - source-highlight # used by less with default highlight
+      - fd
+    state: latest

@@ -1,0 +1,13 @@
+---
+- name: Download starship.toml 🚀 file
+  copy:
+    src: starship.toml
+    dest: "{{ config_dir }}/"
+  when: nerdfont == false
+
+# NOTE: to recover: sudo sh -c 'rm "$(command -v 'starship')"'
+- name: Install Starship 🚀
+  shell: |
+    curl https://starship.rs/install.sh -sSf | sh -s -- -y -b={{ local_home }}
+  args:
+    creates: "{{ local_home }}/starship"

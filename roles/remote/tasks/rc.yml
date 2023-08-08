@@ -1,0 +1,49 @@
+---
+- name: Ensure configuration directory exists
+  file:
+    path: "{{ config_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Copy GameChanger config rc (.*gc) and env files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ config_dir }}/"
+  loop:
+    - .gc
+    - env
+    # - .bashgc
+    # - .zshgc
+# [ -s "$HOME/.config/env" ] && . "$HOME/.config/env"
+
+- name: Check if .zshrc exists and source .*gc files
+  block:
+    - name: Check if .zshrc file exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+      register: zshrc
+
+    - name: Source .*gc files from .zshrc
+      when: zshrc.stat.exists
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: "[ -f {{ config_dir }}/{{ item }} ] && source {{ config_dir }}/{{ item }} 2> /dev/null"
+      loop:
+        - .gc
+        # - .zshgc
+
+- name: Check if .bashrc exists and source .*gc files
+  block:
+    - name: Check if .bashrc file exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.bashrc"
+      register: bashrc
+
+    - name: Source .*gc files from .bashrc
+      when: bashrc.stat.exists
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.bashrc"
+        line: "[ -f {{ config_dir }}/{{ item }} ] && source {{ config_dir }}/{{ item }} 2> /dev/null"
+      loop:
+        - .gc
+        # - .bashgc

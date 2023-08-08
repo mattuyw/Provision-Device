@@ -1,0 +1,33 @@
+---
+# NOTE: very slow. consider:
+# curl -sS https://webi.sh/bat | sh
+# curl -sS https://webi.sh/delta | sh
+# curl -sS https://webi.sh/bat | sh
+# curl -sS https://webi.sh/shfmt | sh
+
+- name: Install RustUp and Cargo 🦀
+  shell: |
+    curl https://sh.rustup.rs -sSf | sh -s -- -y
+  args:
+    creates: "{{ ansible_env.HOME }}/{{ rustup_cargo_home_suffix }}/bin/rustup"
+  environment:
+    RUSTUP_HOME: "{{ ansible_env.HOME }}/{{ rustup_home_suffix }}"
+    CARGO_HOME: "{{ ansible_env.HOME }}/{{ rustup_cargo_home_suffix }}"
+
+- name: Install "lsd" 🦀 package
+  community.general.cargo:
+    name: lsd
+  environment:
+    PATH: "{{ ansible_env.HOME }}/{{ rustup_cargo_home_suffix }}/bin:{{ ansible_env.PATH }}"
+
+- name: Install "bat" 🦀 package
+  community.general.cargo:
+    name: bat
+  environment:
+    PATH: "{{ ansible_env.HOME }}/{{ rustup_cargo_home_suffix }}/bin:{{ ansible_env.PATH }}"
+
+- name: Install "delta" 🦀 package
+  community.general.cargo:
+    name: git-delta
+  environment:
+    PATH: "{{ ansible_env.HOME }}/{{ rustup_cargo_home_suffix }}/bin:{{ ansible_env.PATH }}"
