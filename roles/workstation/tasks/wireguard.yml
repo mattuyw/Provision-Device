@@ -1,11 +1,11 @@
 ---
-- name: Install Mac App Store CLI
-  homebrew:
+- name: Install Mac App Store 🛍️ CLI
+  community.general.homebrew:
     name:
       - mas
-    state: latest
+    state: present
 
-- name: Install Wireguard from Mac App Store
+- name: Install Wireguard 🌐 from App Store (GameChanger VPN)
   community.general.mas:
     id: 1451685025 # `mas search Wireguard`
-    state: latest
+    state: present

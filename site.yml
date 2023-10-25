@@ -9,8 +9,8 @@
     venv_dir: "{{ ansible_env.HOME }}/.pipx" # $HOME/.pipx
     pipx: "{{ venv_dir }}/bin/pipx"
   roles:
-    # - workstation
+    - workstation
     # - fonts
-    - remote
+    # - remote
     # - dev
     # - dev-personal

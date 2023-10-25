@@ -6,7 +6,6 @@
   homebrew_cask:
     name:
       - alacritty
-      - amethyst
       - bartender
       - obs # media recorder
       - yubico-yubikey-manager
@@ -22,13 +21,23 @@
       - gnupg
       - ykman # yubikey
       - reattach-to-user-namespace # tmux requirement on MacOS
-      - lua-language-server # for neovim configuration
     state: latest
 
 - name: Install/Upgrade Entertainment Software
   homebrew_cask:
     name:
-      - spotify
       - signal
     state: latest
 
+
+
+# brew install koekeishiya/formulae/skhd
+# brew install koekeishiya/formulae/yabai
+# - hosts: localhost
+#   tasks:
+#     - name: Install yabai and skhd via Homebrew
+#       homebrew:
+#         name:
+#           - koekeishiya/formulae/yabai
+#           - koekeishiya/formulae/skhd
+#         state: present

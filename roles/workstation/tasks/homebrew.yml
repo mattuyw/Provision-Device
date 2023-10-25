@@ -1,12 +1,27 @@
 ---
-# NOTE: `homebrew_cask` is a required hack.
-#       packages will default to homebrew which will report failure for
-#       existing software
-- homebrew:
+# - name: Check if Homebrew is already installed
+#   ansible.builtin.stat:
+#     path: /opt/homebrew/bin/brew
+#   register: homebrew_installed
+#
+- name: Install Homebrew 🍺
+  ansible.builtin.shell:
+    cmd: set -o pipefail && curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | /bin/bash
+    creates: "/opt/homebrew/bin/brew"
+  environment:
+    NONINTERACTIVE: "1"
+  # register: command_output  # Register the output in the 'command_output' variable
+  # when: not homebrew_installed
+# - name: Ensure Homebrew is in PATH
+#   ansible.builtin.lineinfile:
+#     path: ~/.bash_profile
+#     line: 'export PATH="/usr/local/bin:$PATH"'
+#     create: true
+#     regexp: '^export PATH="/usr/local/bin:$PATH"'
+#   when: not homebrew_installed.stat.exists
+#
+# TODO: need to add to path?
+
+- name: Update Homebrew 🍺
+  community.general.homebrew:
     update_homebrew: true
-    upgrade_all: true
-
-/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-$(BREW_CMD) tap homebrew/cask
-
-brew cleanup
