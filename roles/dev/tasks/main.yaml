@@ -1,0 +1,112 @@
+---
+# TODO: require macOS
+- name: Install engineering software 🏗️
+  community.general.homebrew_cask:
+    name:
+      - 1password/tap/1password-cli
+      - docker
+    state: present
+    accept_external_apps: true
+
+- name: Install Foundations-Suggested Dev Packages
+  ansible.builtin.package:
+    name:
+      - gh # github version control 🐙
+      - git # generic version control 🐙
+      - git-lfs # git large files 🐙
+      - make # build orchestration 🏗️
+      - jq # JSON manipulation 🔍
+      - npm # node package manager 📦
+      - ripgrep # better grep 🦀
+      - fzf # fuzzy finder 🔍
+    state: present
+    # become: true # NOTE: homebrew shouldn't become. need to test remote.
+
+# Not every venv edition creates a pip binary
+# - name: Check if virtual environment already exists
+#   ansible.builtin.stat:
+#     path: "{{ venv_dir }}"
+#   register: venv_stat
+
+# - name: Create a virtual environment
+#   ansible.builtin.command: python3 -m venv "{{ venv_dir }}"
+#   when: not venv_stat.stat.exists
+#
+# - name: Upgrade pip in the virtual environment
+#   ansible.builtin.command: "{{ venv_dir }}/bin/python -m pip install --upgrade pip"
+#   when: not venv_stat.stat.exists
+
+- name: Ensure virtual environment is created
+  ansible.builtin.pip:
+    name: pip
+    virtualenv: "{{ venv_dir }}"
+    virtualenv_command: python3 -m venv
+    state: present
+
+- name: Install pipx
+  ansible.builtin.pip:
+    name: pipx
+    virtualenv: "{{ venv_dir }}"
+    state: present
+    # executable: "{{ venv_dir }}/bin/pip"
+
+- name: Ensure pipx binary directory is in PATH
+  ansible.builtin.command: pipx ensurepath
+  register: pipx_ensurepath
+  changed_when: "'Adding' in pipx_ensurepath.stdout"
+
+- name: Manage pipx packages
+  block:
+    - name: Check pipx packages for invalid interpreter
+      ansible.builtin.command: pipx list --include-injected --json
+      register: pipx_list
+      changed_when: false  # Ensure this command does not report a change.
+      failed_when: "'missing python interpreter' in pipx_list.stderr"
+
+  rescue:
+    - name: Reinstall all pipx packages if interpreter is missing
+      ansible.builtin.command: pipx reinstall-all
+      register: pipx_reinstall
+      changed_when: "'The following package(s) failed to reinstall' not in pipx_reinstall.stderr"
+      # when: interpreter_error
+
+# TODO: check that there isn't already one installed?
+# - name: Install AWS CLI
+#   community.general.pipx:
+#     name: awscliv2
+#     state: present
+#     executable: "{{ pipx }}"
+
+# - name: Install AWS CLI
+#   community.general.pipx:
+#     name: awscliv2
+#     state: present
+#     executable: "{{ pipx }}"
+# TODO: must run awsv2 --install?
+- name: Install pre-commit
+  community.general.pipx:
+    name: pre-commit
+    state: present
+    executable: "{{ pipx }}"
+
+# - name: Install awsv2 if aws
+#   block:
+#     - name: Check if 'aws' command exists
+#       ansible.builtin.command: command -v aws
+#       register: aws_check
+#       failed_when: false
+#       changed_when: false
+#
+#     - name: Install AWS CLI
+#       community.general.pipx:
+#         name: awscliv2
+#         state: present
+#         executable: "{{ pipx }}"
+#       when: aws_check.rc != 0
+
+- name: Install gcaws (GameChanger AWS CLI helper)
+  community.general.pipx:
+    name: gcaws
+    state: present
+    index_url: https://pypi.gamechanger.io/simple/
+    executable: "{{ pipx }}"

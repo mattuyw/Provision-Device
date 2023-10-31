@@ -1,0 +1,10 @@
+---
+- name: Show a debug message if user accepts
+  ansible.builtin.debug:
+    msg: "Configuring zsh with recommended dotfiles..."
+  when: configure_zsh == 'yes'
+
+- name: Show a debug message if user declines
+  ansible.builtin.debug:
+    msg: "Skipped configuring zsh with recommended dotfiles."
+  when: configure_zsh == 'no'

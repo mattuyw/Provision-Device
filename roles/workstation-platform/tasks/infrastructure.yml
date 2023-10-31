@@ -1,0 +1,13 @@
+---
+- name: Install tfswitch
+  block:
+    - name: Tap the warrensbox/tap repository 🚰
+      community.general.homebrew_tap:
+        name: warrensbox/tap
+        url: git@github.com:warrensbox/tap.git
+        state: present
+
+    - name: Install tfswitch 📦
+      community.general.homebrew:
+        name: tfswitch
+        state: present

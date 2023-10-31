@@ -5,4 +5,5 @@
       - less
       - source-highlight # used by less with default highlight
       - fd
+      - colordiff
     state: latest

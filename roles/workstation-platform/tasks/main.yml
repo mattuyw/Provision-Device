@@ -1,0 +1,6 @@
+---
+- name: GameChanger Corporate Software for MacOS
+  when: ansible_distribution == 'MacOSX'
+  block:
+    - name: Install Terraform version manager
+      ansible.builtin.import_tasks: infrastructure.yml

@@ -1,7 +1,8 @@
 ---
-- name: Download {{ font|basename }}.
-  get_url:
-    dest: "{{ nf_fonts_dir }}" #/{{ font|basename }}"
+- name: Download {{ font | basename }}.
+  ansible.builtin.get_url:
+    dest: "{{ nf_fonts_dir }}" # /{{ font|basename }}"
     group: "{{ ansible_user_gid | default(omit) }}"
     owner: "{{ ansible_user_id }}"
+    mode: "0644"
     url: "{{ nf_github_raw_patched_fonts }}/{{ font | urlencode() }}"

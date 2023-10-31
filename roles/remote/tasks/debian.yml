@@ -4,6 +4,7 @@
     name:
       - less
       - source-highlight # used by less with default highlight
+      - colordiff
     state: latest
   become: yes
 

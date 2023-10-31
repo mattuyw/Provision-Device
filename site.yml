@@ -4,13 +4,21 @@
     # - dba-art-kite-crow.gc.com
     - localhost
   # connection: local
-  gather_facts: yes
+  vars_prompt:
+    - name: "configure_zsh"
+      prompt: "Do you want to configure zsh with some recommended dotfiles? (yes/no)"
+      private: false
+      default: "no"
+  gather_facts: true
   vars:
     venv_dir: "{{ ansible_env.HOME }}/.pipx" # $HOME/.pipx
     pipx: "{{ venv_dir }}/bin/pipx"
   roles:
-    - workstation
+    # - dotfiles
     # - fonts
+    # - workstation
+    # - workstation-platform
+    - dev
+  
     # - remote
-    # - dev
     # - dev-personal

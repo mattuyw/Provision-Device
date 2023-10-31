@@ -1,5 +1,4 @@
 ---
-
 - name: GameChanger Corporate Software for MacOS
   when: ansible_distribution == 'MacOSX'
   block:
@@ -14,6 +13,9 @@
 
     - name: Install workstation apps
       ansible.builtin.import_tasks: apps.yml
+
+    # - name: Install Warp terminal emulator
+    #   ansible.builtin.import_tasks: warp.yml
     #
     # - name: Install my apps
     #   ansible.builtin.import_tasks: personal.yml

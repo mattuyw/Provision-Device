@@ -4,12 +4,10 @@
   package:
     name:
       - neovim # better vim
-      - ripgrep # 🦀
       - tldr
       - thefuck # fix terminal mistakes
       - tmux # terminal multiplexing
-      - fzf # fuzzy finder
-    state: latest
+    state: present
   become: yes
 
 - import_tasks: btop.yml
