@@ -5,17 +5,8 @@
     - name: Install Homebrew package manager
       ansible.builtin.import_tasks: homebrew.yml
 
-    - name: Install the GameChanger VPN
-      ansible.builtin.import_tasks: wireguard.yml
-
     - name: Install the macOS amd64 translator
       ansible.builtin.import_tasks: rosetta2.yml
 
-    - name: Install workstation apps
-      ansible.builtin.import_tasks: apps.yml
-
-    # - name: Install Warp terminal emulator
-    #   ansible.builtin.import_tasks: warp.yml
-    #
-    # - name: Install my apps
-    #   ansible.builtin.import_tasks: personal.yml
+    - name: Install my apps
+      ansible.builtin.import_tasks: personal.yml

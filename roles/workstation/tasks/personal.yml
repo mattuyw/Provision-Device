@@ -2,35 +2,28 @@
 # NOTE: `homebrew_cask` is a required hack.
 #       packages will default to homebrew which will report failure for
 #       existing software
-- name: Install/Upgrade Casks for Self Selected Software
-  homebrew_cask:
+- name: Install/Update Apps
+  community.general.homebrew_cask:
     name:
+      # - 1password
       - alacritty
-      - bartender
-      - obs # media recorder
-      - yubico-yubikey-manager
-      - firefox
-      - iina # media player
-      - topnotch
       - alfred
+      - bartender
+      - topnotch
+      - yubico-yubikey-manager
+      # - obs # media recorder
+      # - iina # media player
     state: latest
+    accept_external_apps: true
 
-- name: Install Self Selected Software
-  homebrew:
+- name: Install/Update Programs
+  community.general.homebrew:
     name:
       - gnupg
-      - ykman # yubikey
       - reattach-to-user-namespace # tmux requirement on MacOS
+      - ykman # yubikey
+      - zsh
     state: latest
-
-- name: Install/Upgrade Entertainment Software
-  homebrew_cask:
-    name:
-      - signal
-    state: latest
-
-
-
 # brew install koekeishiya/formulae/skhd
 # brew install koekeishiya/formulae/yabai
 # - hosts: localhost

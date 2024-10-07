@@ -1,19 +1,19 @@
 ---
 # TODO: require macOS
-- name: Install engineering software 🏗️
-  community.general.homebrew_cask:
-    name:
-      - 1password/tap/1password-cli
-      - docker
-    state: present
-    accept_external_apps: true
+# - name: Install engineering software 🏗️
+#   community.general.homebrew_cask:
+#     name:
+#       # - 1password/tap/1password-cli
+#       - docker
+#     state: present
+#     accept_external_apps: true
 
 - name: Install Foundations-Suggested Dev Packages
   ansible.builtin.package:
     name:
       - gh # github version control 🐙
       - git # generic version control 🐙
-      - git-lfs # git large files 🐙
+      # - git-lfs # git large files 🐙
       - make # build orchestration 🏗️
       - jq # JSON manipulation 🔍
       - npm # node package manager 📦
@@ -21,6 +21,8 @@
       - fzf # fuzzy finder 🔍
     state: present
     # become: true # NOTE: homebrew shouldn't become. need to test remote.
+
+  # TODO: git must be configured to use gpg sign
 
 # Not every venv edition creates a pip binary
 # - name: Check if virtual environment already exists
@@ -60,7 +62,7 @@
     - name: Check pipx packages for invalid interpreter
       ansible.builtin.command: pipx list --include-injected --json
       register: pipx_list
-      changed_when: false  # Ensure this command does not report a change.
+      changed_when: false # Ensure this command does not report a change.
       failed_when: "'missing python interpreter' in pipx_list.stderr"
 
   rescue:
@@ -88,7 +90,6 @@
     name: pre-commit
     state: present
     executable: "{{ pipx }}"
-
 # - name: Install awsv2 if aws
 #   block:
 #     - name: Check if 'aws' command exists
@@ -103,10 +104,3 @@
 #         state: present
 #         executable: "{{ pipx }}"
 #       when: aws_check.rc != 0
-
-- name: Install gcaws (GameChanger AWS CLI helper)
-  community.general.pipx:
-    name: gcaws
-    state: present
-    index_url: https://pypi.gamechanger.io/simple/
-    executable: "{{ pipx }}"

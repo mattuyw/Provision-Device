@@ -1,4 +1,19 @@
 ---
+- name: Install AWS CLI
+  block:
+    - name: Install awscliv2 ☁️
+      community.general.homebrew:
+        name:
+          - awscli
+        state: present
+
+    - name: Install Session Manager Plugin ☁️
+      community.general.homebrew_cask:
+        name:
+          - session-manager-plugin
+        state: present
+        accept_external_apps: true
+
 - name: Install tfswitch
   block:
     - name: Tap the warrensbox/tap repository 🚰
